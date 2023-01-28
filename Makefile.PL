@@ -4,42 +4,49 @@ use warnings;
 use ExtUtils::MakeMaker;
 
 my %WriteMakefileArgs = (
-    NAME             => 'Games::CardDeck',
-    AUTHOR           => q{Jim Bacon <boftx@cpan.org>},
-    VERSION_FROM     => 'lib/Games/CardDeck.pm',
-    ABSTRACT_FROM    => 'lib/Games/CardDeck.pm',
-    LICENSE          => 'artistic_2',
-    MIN_PERL_VERSION => '5.006',
+    NAME               => 'Games::CardDeck',
+    AUTHOR             => q{Jim Bacon <boftx@cpan.org>},
+    VERSION_FROM       => 'lib/Games/CardDeck.pm',
+    ABSTRACT_FROM      => 'lib/Games/CardDeck.pm',
+    LICENSE            => 'artistic_2',
+    MIN_PERL_VERSION   => '5.010',
     CONFIGURE_REQUIRES => {
         'ExtUtils::MakeMaker' => '0',
     },
     TEST_REQUIRES => {
         'Test::More' => '0',
+        strictures   => 0,
     },
     PREREQ_PM => {
+
         #'ABC'              => '1.6',
         #'Foo::Bar::Module' => '5.0401',
+        strictures                => 0,
+        Moo                       => 0,
+        'MooX::StrictConstructor' => 0,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
-    clean => { FILES => 'Games-CardDeck-*' },
+    clean => { FILES    => 'Games-CardDeck-*' },
 );
 
 # Compatibility with old versions of ExtUtils::MakeMaker
-unless (eval { ExtUtils::MakeMaker->VERSION('6.64'); 1 }) {
+unless ( eval { ExtUtils::MakeMaker->VERSION('6.64'); 1 } ) {
     my $test_requires = delete $WriteMakefileArgs{TEST_REQUIRES} || {};
-    @{$WriteMakefileArgs{PREREQ_PM}}{keys %$test_requires} = values %$test_requires;
+    @{ $WriteMakefileArgs{PREREQ_PM} }{ keys %$test_requires } =
+      values %$test_requires;
 }
 
-unless (eval { ExtUtils::MakeMaker->VERSION('6.55_03'); 1 }) {
+unless ( eval { ExtUtils::MakeMaker->VERSION('6.55_03'); 1 } ) {
     my $build_requires = delete $WriteMakefileArgs{BUILD_REQUIRES} || {};
-    @{$WriteMakefileArgs{PREREQ_PM}}{keys %$build_requires} = values %$build_requires;
+    @{ $WriteMakefileArgs{PREREQ_PM} }{ keys %$build_requires } =
+      values %$build_requires;
 }
 
 delete $WriteMakefileArgs{CONFIGURE_REQUIRES}
-    unless eval { ExtUtils::MakeMaker->VERSION('6.52'); 1 };
+  unless eval { ExtUtils::MakeMaker->VERSION('6.52'); 1 };
 delete $WriteMakefileArgs{MIN_PERL_VERSION}
-    unless eval { ExtUtils::MakeMaker->VERSION('6.48'); 1 };
+  unless eval { ExtUtils::MakeMaker->VERSION('6.48'); 1 };
 delete $WriteMakefileArgs{LICENSE}
-    unless eval { ExtUtils::MakeMaker->VERSION('6.31'); 1 };
+  unless eval { ExtUtils::MakeMaker->VERSION('6.31'); 1 };
 
 WriteMakefile(%WriteMakefileArgs);
